@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MovingBall</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="obg_color">Outer background color</string>
+    <string name="ibg_color">Inner background color</string>
+    <string name="ball_color">Ball color</string>
+
+    <!-- preference settings -->
+    <string name="psc_ball_settings">Ball settings</string>
+    <string name="ball_v_x">x velocity</string>
+    <string name="ball_v_y">y velocity</string>
+    <string name="ball_x">Original x position</string>
+    <string name="ball_y">Original y position</string>
+    <string name="use_gravity">Use earth gravity</string>
+    <string name="acce_x">x accelerometer</string>
+    <string name="acce_y">y accelerometer</string>
+    <string name="coeff_of_restitution">Coefficient of restitution</string>
+    <string name="ball_color_setting">Ball color</string>
+    <string name="psc_board_settings">Game board settings</string>
+    <string name="psc_theme">Game theme</string>
+    <string name="theme_outer_bg_color">Outer background color</string>
+    <string name="theme_inner_bg_color">Inner background color</string>
+</resources>
