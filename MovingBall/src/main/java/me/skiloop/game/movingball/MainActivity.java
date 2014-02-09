@@ -1,13 +1,20 @@
 package me.skiloop.game.movingball;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.os.Build;
 import android.widget.LinearLayout;
@@ -23,15 +30,46 @@ import java.util.TimerTask;
 import java.util.logging.LogRecord;
 
 public class MainActivity extends ActionBarActivity {
+    private static final String TAG="MainActivity";
     public static final int REQUEST_SETTING = -1;
+    private static final int BALL_MOVE_MESSAGE = 0x123;
+    private static final float DEFAULT_TIME_DELTA_FLOAT=0.2F;
+
+    protected static final String DELTA_TIME_STRING="delta_time";
+    protected static final String DELTA_T_FLOAT="delta_t_float";
+    protected static final String BALL_FIELD="ball_field";
+    protected static final String USE_GRAVITY="use_gravity";
+
     private BallField mBallField;
     private BoardView mBoardView;
-    private static final int BALL_MOVE_MESSAGE = 0x123;
-    private float mDt = 0.1f;
+
+    private float mDt;
 
     private int mDeltaTime;
     private int mHalfDeltaTime;
-    private boolean hasMeasured = false;
+
+    private boolean mUseGravity = true;
+
+    private SensorManager mSensorManager;
+
+    private SensorEventListener mSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (Sensor.TYPE_ACCELEROMETER == event.sensor.getType()) {
+                for (Ball ball : mBallField.getmBalls()) {
+                    ball.setXAccelerometer(event.values[0]);
+                    ball.setYAccelerometer(event.values[1]);
+                }
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +127,44 @@ public class MainActivity extends ActionBarActivity {
             }
         }, 0, mDeltaTime);
 
-
+        // sensors
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+        if (mUseGravity) {
+            mSensorManager.unregisterListener(mSensorEventListener);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        Log.d(TAG, "onStop");
+        if (mUseGravity) {
+            mSensorManager.unregisterListener(mSensorEventListener);
+        }
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+        SharedPreferences gameSettings=
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        mUseGravity = gameSettings.getBoolean(USE_GRAVITY,true);
+        mDt=gameSettings.getFloat(DELTA_T_FLOAT,DEFAULT_TIME_DELTA_FLOAT);
+
+        if (mUseGravity) {
+            mSensorManager.registerListener(mSensorEventListener,
+                    mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_GAME);
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
