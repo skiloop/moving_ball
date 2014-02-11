@@ -265,6 +265,14 @@ public class Ball {
         if (nextY < 0 || nextX < 0) {
             Log.d(TAG, "next x,y < 0");
         }
+        // 防止积累
+        if (nextX + getRadius() - x_size > 0 && nextX + getRadius() - x_size <= 1) {
+            nextX = x_size - getRadius() ;
+        }
+        if (nextY + getRadius() - y_size > 0 && nextY + getRadius() - y_size <= 1) {
+            nextY = y_size - getRadius();
+        }
+
         setX(nextX);
         setY(nextY);
         setXVelocity(nextVx);

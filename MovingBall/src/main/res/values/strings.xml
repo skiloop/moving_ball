@@ -22,6 +22,8 @@
     <string name="ball_color_setting">Ball color</string>
     <string name="ball_radius">Radius</string>
     <string name="psc_board_settings">Game board settings</string>
+    <string name="update_time">Handler update time</string>
+    <string name="update_time_summary">Handler update time in milli seconds</string>
     <string name="psc_theme">Game theme</string>
     <string name="theme_outer_bg_color">Outer background color</string>
     <string name="theme_inner_bg_color">Inner background color</string>

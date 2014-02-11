@@ -86,27 +86,40 @@ public class BoardView extends View {
 
         canvas.drawColor(Color.WHITE);
 
-//        int paddingLeft = getPaddingLeft();
-//        int paddingBottom = getPaddingBottom();
-//        // draw background
-//        if (mOuterBackground.getColor() != NO_COLOR) {
-//            canvas.drawRect(0.0f, getSizeY(), getSizeX(), 0.0f, mOuterBackground);
-//        }
-//        if (mInnerBackground.getColor() != NO_COLOR) {
-//            canvas.drawRect(paddingLeft, paddingBottom + getSizeY(), paddingLeft + getSizeX(), paddingBottom, mInnerBackground);
-//        }
+        int paddingLeft = getPaddingLeft();
+        int paddingBottom = getPaddingBottom();
+
+        // draw background
+        if (mOuterBackground.getColor() != NO_COLOR) {
+            canvas.drawRect(0.0f, getSizeY(), getSizeX(), 0.0f, mOuterBackground);
+        }
+        if (mInnerBackground.getColor() != NO_COLOR) {
+            canvas.drawRect(paddingLeft, paddingBottom + getSizeY(), paddingLeft + getSizeX(), paddingBottom, mInnerBackground);
+        }
+        // draw sample circle
         Paint paint = new Paint();
         paint.setColor(Color.MAGENTA);
         canvas.drawCircle(100, 160, 80, paint);
+
+        // draw ball
         if (null != mBallField) {
             Paint tempPaint = new Paint();
 //            for (Ball ball : mBallField.getmBalls()) {
 //                tempPaint.setColor(ball.getColor());
 //                canvas.drawCircle(ball.getX(), ball.getY(), ball.getRadius(), tempPaint);
 //            }
-            Ball ball=mBallField.getmBall();
+            Ball ball = mBallField.getmBall();
+            tempPaint.setColor(ball.getColor());
             canvas.drawCircle(ball.getX(), ball.getY(), ball.getRadius(), tempPaint);
         }
+    }
+
+    public void setOuterBackgroundColor(int color) {
+        mOuterBackground.setColor(color);
+    }
+
+    public void setInnerBackgroundColor(int color) {
+        mInnerBackground.setColor(color);
     }
 
     public Point getSize() {

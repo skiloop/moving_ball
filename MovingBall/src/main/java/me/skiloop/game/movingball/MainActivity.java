@@ -30,21 +30,21 @@ import java.util.TimerTask;
 import java.util.logging.LogRecord;
 
 public class MainActivity extends ActionBarActivity {
-    private static final String TAG="MainActivity";
+    private static final String TAG = "MainActivity";
     public static final int REQUEST_SETTING = -1;
     private static final int BALL_MOVE_MESSAGE = 0x123;
-    private static final float DEFAULT_TIME_DELTA_FLOAT=0.2F;
+    private static final float DEFAULT_TIME_DELTA_FLOAT = 0.2F;
 
-    protected static final String DELTA_TIME_STRING="delta_time";
-    protected static final String DELTA_T_FLOAT="delta_t_float";
-    protected static final String BALL_FIELD="ball_field";
-    protected static final String USE_GRAVITY="use_gravity";
+    protected static final String DELTA_TIME_STRING = "delta_time";
+    protected static final String DELTA_T_FLOAT = "delta_t_float";
+    protected static final String BALL_FIELD = "ball_field";
+    protected static final String USE_GRAVITY = "use_gravity";
 
     private BallField mBallField;
     private BoardView mBoardView;
 
-    private float mDt=DEFAULT_TIME_DELTA_FLOAT;
-    private int mDeltaTime;
+    private float mDt = DEFAULT_TIME_DELTA_FLOAT;
+    private int mDeltaTime = 150;
     private int mHalfDeltaTime;
 
     private boolean mUseGravity = true;
@@ -62,8 +62,8 @@ public class MainActivity extends ActionBarActivity {
                     ball.setXAccelerometer(event.values[0]);
                     ball.setYAccelerometer(event.values[1]);
                 }
-                Ball ball=mBallField.getmBall();
-                ball.setXAccelerometer(event.values[0]);
+                Ball ball = mBallField.getmBall();
+                ball.setXAccelerometer(-event.values[0]);
                 ball.setYAccelerometer(event.values[1]);
             }
         }
@@ -108,7 +108,7 @@ public class MainActivity extends ActionBarActivity {
 //                return true;
 //            }
 //        });
-        mDeltaTime = 300;
+
         mHalfDeltaTime = mDeltaTime / 2;
         mBoardView.setBallField(mBallField);
 
@@ -158,19 +158,27 @@ public class MainActivity extends ActionBarActivity {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        SharedPreferences gameSettings=
+        SharedPreferences gameSettings =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mUseGravity = gameSettings.getBoolean(getResources().getString(R.string.use_gravity),true);
-        Ball ball=mBallField.getmBall();
+        mUseGravity = gameSettings.getBoolean(getResources().getString(R.string.use_gravity), true);
+
+        mBoardView.setInnerBackgroundColor(
+                gameSettings.getInt(getString(R.string.theme_inner_bg_color), BoardView.NO_COLOR));
+        mBoardView.setOuterBackgroundColor(
+                gameSettings.getInt(getString(R.string.theme_outer_bg_color), BoardView.NO_COLOR));
+        mDeltaTime = Integer.parseInt(gameSettings.getString(getString(R.string.update_time), "150"));
+
+        Ball ball = mBallField.getmBall();
 
         ball.setX(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_x), "100f")));
         ball.setY(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_y), "110")));
 
         ball.setXVelocity(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_v_x), "10")));
         ball.setYVelocity(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_v_y), "10")));
-        ball.setCOR(Float.parseFloat(gameSettings.getString(getString(R.string.coeff_of_restitution),"1.0")));
-        ball.setRadius(Float.parseFloat(gameSettings.getString(getString(R.string.ball_radius),"30")));
-        ball.setColor(Color.parseColor(gameSettings.getString(getString(R.string.ball_color_setting),"0xff0000")));
+        ball.setCOR(Float.parseFloat(gameSettings.getString(getString(R.string.coeff_of_restitution), "1.0")));
+        ball.setRadius(Float.parseFloat(gameSettings.getString(getString(R.string.ball_radius), "30")));
+        ball.setColor(gameSettings.getInt(getString(R.string.ball_color_setting), Color.RED));
+
 
         if (mUseGravity) {
             ball.setXAccelerometer(0.0f);
@@ -178,11 +186,11 @@ public class MainActivity extends ActionBarActivity {
             mSensorManager.registerListener(mSensorEventListener,
                     mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                     SensorManager.SENSOR_DELAY_GAME);
-        }else{
+        } else {
             ball.setXAccelerometer(Float.parseFloat(
-                    gameSettings.getString(getResources().getString(R.string.acce_x),"0")));
+                    gameSettings.getString(getResources().getString(R.string.acce_x), "0")));
             ball.setYAccelerometer(Float.parseFloat(
-                    gameSettings.getString(getResources().getString(R.string.acce_y),"0")));
+                    gameSettings.getString(getResources().getString(R.string.acce_y), "0")));
         }
 
     }
@@ -214,18 +222,18 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivityForResult(intent, REQUEST_SETTING);
                 return true;
-            case R.id.obg_color:
-                Toast.makeText(this, getResources().getString(R.string.obg_color)
-                        , Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.ibg_color:
-                Toast.makeText(this, getResources().getString(R.string.ibg_color)
-                        , Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.ball_color:
-                Toast.makeText(this, getResources().getString(R.string.ball_color)
-                        , Toast.LENGTH_SHORT).show();
-                return true;
+//            case R.id.obg_color:
+//                Toast.makeText(this, getResources().getString(R.string.obg_color)
+//                        , Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.ibg_color:
+//                Toast.makeText(this, getResources().getString(R.string.ibg_color)
+//                        , Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.ball_color:
+//                Toast.makeText(this, getResources().getString(R.string.ball_color)
+//                        , Toast.LENGTH_SHORT).show();
+//                return true;
         }
         return super.onOptionsItemSelected(item);
     }
