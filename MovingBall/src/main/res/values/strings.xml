@@ -20,6 +20,7 @@
     <string name="acce_y">y accelerometer</string>
     <string name="coeff_of_restitution">Coefficient of restitution</string>
     <string name="ball_color_setting">Ball color</string>
+    <string name="ball_radius">Radius</string>
     <string name="psc_board_settings">Game board settings</string>
     <string name="psc_theme">Game theme</string>
     <string name="theme_outer_bg_color">Outer background color</string>

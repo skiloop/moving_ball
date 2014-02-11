@@ -7,8 +7,8 @@ import java.util.*;
  */
 public class BallField {
     public static final int DEFAULT_BALL_COUNT=1;
-    public static final float DEFAULT_SIZE_X=100.0F;
-    public static final float DEFAULT_SIZE_Y=110.0F;
+    public static final float DEFAULT_SIZE_X=1000.0F;
+    public static final float DEFAULT_SIZE_Y=1100.0F;
     public static final float DEFAULT_DELTA_T=1.0f;
     private float mSizeX;
     private float mSizeY;
@@ -16,6 +16,8 @@ public class BallField {
     private Set<Ball> mBalls;
 
     private float mDeltaT;
+
+    private Ball mBall;
 
     public BallField(float dt){
         this(DEFAULT_SIZE_X,DEFAULT_SIZE_Y,dt);
@@ -29,6 +31,9 @@ public class BallField {
         setmSizeY(size_y);
         setmDeltaT(deltaT);
         setmBalls(new HashSet<Ball>(ballCount));
+
+        setmBall(new Ball());
+
         for(int i=1;i<=ballCount;i++){
             Ball ball=new Ball();
             //ball.setYAccelerometer(0.0f);
@@ -54,9 +59,10 @@ public class BallField {
     }
 
     public void moveBalls(){
-        for(Ball ball: getmBalls()){
-            ball.nextPos(getmDeltaT(), getmSizeX(), getmSizeY());
-        }
+//        for(Ball ball: getmBalls()){
+//            ball.nextPos(getmDeltaT(), getmSizeX(), getmSizeY());
+//        }
+        mBall.nextPos(getmDeltaT(),getmSizeX(),getmSizeY());
     }
 
     public Set<Ball> getmBalls() {
@@ -89,5 +95,13 @@ public class BallField {
 
     public void setmDeltaT(float mDeltaT) {
         this.mDeltaT = mDeltaT;
+    }
+
+    public Ball getmBall() {
+        return mBall;
+    }
+
+    public void setmBall(Ball mBall) {
+        this.mBall = mBall;
     }
 }

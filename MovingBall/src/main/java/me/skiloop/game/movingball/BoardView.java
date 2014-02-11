@@ -100,10 +100,12 @@ public class BoardView extends View {
         canvas.drawCircle(100, 160, 80, paint);
         if (null != mBallField) {
             Paint tempPaint = new Paint();
-            for (Ball ball : mBallField.getmBalls()) {
-                tempPaint.setColor(ball.getColor());
-                canvas.drawCircle(ball.getX(), ball.getY(), ball.getRadius(), tempPaint);
-            }
+//            for (Ball ball : mBallField.getmBalls()) {
+//                tempPaint.setColor(ball.getColor());
+//                canvas.drawCircle(ball.getX(), ball.getY(), ball.getRadius(), tempPaint);
+//            }
+            Ball ball=mBallField.getmBall();
+            canvas.drawCircle(ball.getX(), ball.getY(), ball.getRadius(), tempPaint);
         }
     }
 

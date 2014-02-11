@@ -43,14 +43,15 @@ public class MainActivity extends ActionBarActivity {
     private BallField mBallField;
     private BoardView mBoardView;
 
-    private float mDt;
-
+    private float mDt=DEFAULT_TIME_DELTA_FLOAT;
     private int mDeltaTime;
     private int mHalfDeltaTime;
 
     private boolean mUseGravity = true;
 
     private SensorManager mSensorManager;
+
+    private Timer mTimer;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
 
@@ -61,6 +62,9 @@ public class MainActivity extends ActionBarActivity {
                     ball.setXAccelerometer(event.values[0]);
                     ball.setYAccelerometer(event.values[1]);
                 }
+                Ball ball=mBallField.getmBall();
+                ball.setXAccelerometer(event.values[0]);
+                ball.setYAccelerometer(event.values[1]);
             }
         }
 
@@ -116,7 +120,8 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         };
-        new Timer().schedule(new TimerTask() {
+        mTimer = new Timer();
+        mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 mBallField.moveBalls();
@@ -155,13 +160,29 @@ public class MainActivity extends ActionBarActivity {
         Log.d(TAG, "onResume");
         SharedPreferences gameSettings=
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        mUseGravity = gameSettings.getBoolean(USE_GRAVITY,true);
-        mDt=gameSettings.getFloat(DELTA_T_FLOAT,DEFAULT_TIME_DELTA_FLOAT);
+        mUseGravity = gameSettings.getBoolean(getResources().getString(R.string.use_gravity),true);
+        Ball ball=mBallField.getmBall();
+
+        ball.setX(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_x), "100f")));
+        ball.setY(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_y), "110")));
+
+        ball.setXVelocity(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_v_x), "10")));
+        ball.setYVelocity(Float.parseFloat(gameSettings.getString(getResources().getString(R.string.ball_v_y), "10")));
+        ball.setCOR(Float.parseFloat(gameSettings.getString(getString(R.string.coeff_of_restitution),"1.0")));
+        ball.setRadius(Float.parseFloat(gameSettings.getString(getString(R.string.ball_radius),"30")));
+        ball.setColor(Color.parseColor(gameSettings.getString(getString(R.string.ball_color_setting),"0xff0000")));
 
         if (mUseGravity) {
+            ball.setXAccelerometer(0.0f);
+            ball.setYAccelerometer(0.0f);
             mSensorManager.registerListener(mSensorEventListener,
                     mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                     SensorManager.SENSOR_DELAY_GAME);
+        }else{
+            ball.setXAccelerometer(Float.parseFloat(
+                    gameSettings.getString(getResources().getString(R.string.acce_x),"0")));
+            ball.setYAccelerometer(Float.parseFloat(
+                    gameSettings.getString(getResources().getString(R.string.acce_y),"0")));
         }
 
     }

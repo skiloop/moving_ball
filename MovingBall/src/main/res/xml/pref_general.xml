@@ -33,12 +33,6 @@
     <PreferenceCategory
         android:key="@string/psc_ball_settings"
         android:title="@string/psc_ball_settings">
-        <me.skiloop.game.movingball.colorpicker.ColorPickerPreference
-            android:key="color2"
-            android:persistent="false"
-            android:title="@string/theme_inner_bg_color"
-            android:summary="@string/theme_inner_bg_color"
-            android:defaultValue="0x00ff00" />
         <EditTextPreference
             android:key="@string/ball_x"
             android:title="@string/ball_x"
@@ -75,6 +69,12 @@
             android:defaultValue="1.0"
             android:inputType="numberDecimal" />
         <EditTextPreference
+            android:key="@string/ball_radius"
+            android:title="@string/ball_radius"
+            android:defaultValue="30"
+            android:inputType="numberDecimal" />
+
+        <me.skiloop.game.movingball.colorpicker.ColorPickerPreference
             android:key="@string/ball_color_setting"
             android:title="@string/ball_color_setting"
             android:defaultValue="@color/blue" />
@@ -89,12 +89,12 @@
     <PreferenceCategory
         android:key="@string/psc_theme"
         android:title="@string/psc_theme">
-        <EditTextPreference
+        <me.skiloop.game.movingball.colorpicker.ColorPickerPreference
             android:key="@string/theme_outer_bg_color"
             android:title="@string/theme_outer_bg_color"
             android:hint="HEX"
             android:defaultValue="@color/red" />
-        <EditTextPreference
+        <me.skiloop.game.movingball.colorpicker.ColorPickerPreference
             android:key="@string/theme_inner_bg_color"
             android:title="@string/theme_inner_bg_color"
             android:hint="HEX"
