@@ -11,14 +11,24 @@
 
     <!-- preference settings -->
     <string name="psc_ball_settings">Ball settings</string>
-    <string name="ball_v_x">x velocity</string>
-    <string name="ball_v_y">y velocity</string>
+    <string name="ball_v_x">Original x velocity</string>
+    <string name="ball_v_y">Original y velocity</string>
     <string name="ball_x">Original x position</string>
     <string name="ball_y">Original y position</string>
     <string name="use_gravity">Use earth gravity</string>
-    <string name="acce_x">x accelerometer</string>
-    <string name="acce_y">y accelerometer</string>
-    <string name="coeff_of_restitution">Coefficient of restitution</string>
+    <string name="use_gravity_summary">Use earth gravity as accelerometer</string>
+    <string name="gravity_coefficients">Gravity coefficients</string>
+    <string name="gravity_coefficients_summary">How much the gravity affect the ball</string>
+    <string name="random_accelerometer">Random accelerometer</string>
+    <string name="random_accelerometer_summary">Use random accelerometer</string>
+    <string name="max_x_accelerometer">Max x accelerometer</string>
+    <string name="max_y_accelerometer">Max y accelerometer</string>
+    <string name="max_x_accelerometer_summary">Max x accelerometer for random type</string>
+    <string name="max_y_accelerometer_summary">Max y accelerometer for random type</string>
+    <string name="accelerometer_x">x accelerometer</string>
+    <string name="accelerometer_y">y accelerometer</string>
+    <string name="coefficients_of_restitution">Coefficient of restitution</string>
+    <string name="coefficients_of_restitution_summary">No larger than 1 and no less than -1.0.</string>
     <string name="ball_color_setting">Ball color</string>
     <string name="ball_radius">Radius</string>
     <string name="psc_board_settings">Game board settings</string>

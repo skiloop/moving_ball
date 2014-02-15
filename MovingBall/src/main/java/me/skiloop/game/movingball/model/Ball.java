@@ -188,7 +188,7 @@ public class Ball {
         float nextX = getX() + (getXVelocity() + getXAccelerometer() * dt / 2) * dt;
         float nextY = getY() + (getYVelocity() + getYAccelerometer() * dt / 2) * dt;
 
-        if (nextY < 0 || nextX < 0) {
+        if (nextY - getRadius() < 0 || nextX - getRadius() < 0) {
             Log.d(TAG, "next x,y < 0");
         }
         // reach left side
@@ -196,16 +196,18 @@ public class Ball {
             float t1;
             float s = getX() - getRadius();
             t1 = travelTime(getXAccelerometer(), getXVelocity(), -s);
-            if (getXAccelerometer() != 0.0f) {
-                if (nextVelocity(getXAccelerometer(), getXVelocity(), t1) * getXVelocity() > 0) {
-                    float tempVelocity = getXVelocity() + getXAccelerometer() * t1;
-                    nextVx = -mCOR * tempVelocity + getXAccelerometer() * (dt - t1);
-                    nextX = getRadius() + (-mCOR * tempVelocity + getXAccelerometer() * (dt - t1) / 2) * (dt - t1);
+            if (Float.MAX_VALUE != t1) {
+                if (getXAccelerometer() != 0.0f) {
+                    if (nextVelocity(getXAccelerometer(), getXVelocity(), t1) * getXVelocity() > 0) {
+                        float tempVelocity = getXVelocity() + getXAccelerometer() * t1;
+                        nextVx = -mCOR * tempVelocity + getXAccelerometer() * (dt - t1);
+                        nextX = getRadius() + (-mCOR * tempVelocity + getXAccelerometer() * (dt - t1) / 2) * (dt - t1);
+                    }
+                } else {
+                    nextVx = -getCOR() * getXVelocity();
+                    t1 = (getX() - getRadius()) / -getXVelocity();
+                    nextX = nextVx * (dt - t1) + getRadius();
                 }
-            } else if (Float.MAX_VALUE != t1) {
-                nextVx = -getCOR() * getXVelocity();
-                t1 = (getX() - getRadius()) / -getXVelocity();
-                nextX = nextVx * (dt - t1) + getRadius();
             }
         }
         // reach right size
@@ -213,18 +215,20 @@ public class Ball {
             float t1;
             float s = x_size - getX() - getRadius();
             t1 = travelTime(getXAccelerometer(), getXVelocity(), s);
-            if (t1 != Float.MAX_VALUE && getXAccelerometer() != 0.0f) {
-                if (nextVelocity(getXAccelerometer(), getXVelocity(), t1) * getXVelocity() > 0) {
-                    float tempVelocity = getXVelocity() + getXAccelerometer() * t1;
-                    nextVx = -mCOR * tempVelocity + getXAccelerometer() * (dt - t1);
-                    nextX = x_size - getRadius()
-                            - (-mCOR * tempVelocity
-                            + getXAccelerometer() * (dt - t1) / 2) * (dt - t1);
+            if (Float.MAX_VALUE != t1) {
+                if (t1 != Float.MAX_VALUE && getXAccelerometer() != 0.0f) {
+                    if (nextVelocity(getXAccelerometer(), getXVelocity(), t1) * getXVelocity() > 0) {
+                        float tempVelocity = getXVelocity() + getXAccelerometer() * t1;
+                        nextVx = -mCOR * tempVelocity + getXAccelerometer() * (dt - t1);
+                        nextX = x_size - getRadius()
+                                - (-mCOR * tempVelocity
+                                + getXAccelerometer() * (dt - t1) / 2) * (dt - t1);
+                    }
+                } else if (Float.MAX_VALUE != t1) {
+                    nextVx = -getCOR() * getXVelocity();
+                    t1 = (x_size - getX() - getRadius()) / -getXVelocity();
+                    nextX = x_size + nextVx * (dt - t1) - getRadius();
                 }
-            } else if (Float.MAX_VALUE != t1) {
-                nextVx = -getCOR() * getXVelocity();
-                t1 = (x_size - getX() - getRadius()) / -getXVelocity();
-                nextX = x_size + nextVx * (dt - t1) - getRadius();
             }
         }
         // reach bottom
@@ -232,16 +236,18 @@ public class Ball {
             float t1;
             float s = getY() - getRadius();
             t1 = travelTime(getYAccelerometer(), getYVelocity(), -s);
-            if (Float.MAX_VALUE != t1 && getYAccelerometer() != 0.0f) {
-                if (nextVelocity(getYAccelerometer(), getYVelocity(), t1) * getYVelocity() > 0) {
-                    float tempVelocity = getYVelocity() + getYAccelerometer() * t1;
-                    nextVy = -mCOR * tempVelocity + getYAccelerometer() * (dt - t1);
-                    nextY = getRadius() + (-mCOR * tempVelocity + getYAccelerometer() * (dt - t1) / 2) * (dt - t1);
+            if (Float.MAX_VALUE != t1) {
+                if (Float.MAX_VALUE != t1 && getYAccelerometer() != 0.0f) {
+                    if (nextVelocity(getYAccelerometer(), getYVelocity(), t1) * getYVelocity() > 0) {
+                        float tempVelocity = getYVelocity() + getYAccelerometer() * t1;
+                        nextVy = -mCOR * tempVelocity + getYAccelerometer() * (dt - t1);
+                        nextY = getRadius() + (-mCOR * tempVelocity + getYAccelerometer() * (dt - t1) / 2) * (dt - t1);
+                    }
+                } else if (Float.MAX_VALUE != t1) {
+                    nextVy = -getCOR() * getYVelocity();
+                    t1 = (getY() - getRadius()) / -getYVelocity();
+                    nextY = nextVy * (dt - t1) + getRadius();
                 }
-            } else if (Float.MAX_VALUE != t1) {
-                nextVy = -getCOR() * getYVelocity();
-                t1 = (getY() - getRadius()) / -getYVelocity();
-                nextY = nextVy * (dt - t1) + getRadius();
             }
         }
         // reach top
@@ -249,25 +255,33 @@ public class Ball {
             float t1;
             float s = y_size - getY() - getRadius();
             t1 = travelTime(getYAccelerometer(), getYVelocity(), s);
-            if (Float.MAX_VALUE != t1 && getYAccelerometer() != 0f) {
-                if (nextVelocity(getYAccelerometer(), getYVelocity(), t1) * getYVelocity() > 0) {
-                    float tempVelocity = getYVelocity() + getYAccelerometer() * t1;
-                    nextVy = -mCOR * tempVelocity + getYAccelerometer() * (dt - t1);
-                    nextY = y_size - getRadius() + (-mCOR * tempVelocity + getYAccelerometer() * (dt - t1) / 2) * (dt - t1);
+            if (Float.MAX_VALUE != t1) {
+                if (Float.MAX_VALUE != t1 && getYAccelerometer() != 0f) {
+                    if (nextVelocity(getYAccelerometer(), getYVelocity(), t1) * getYVelocity() > 0) {
+                        float tempVelocity = getYVelocity() + getYAccelerometer() * t1;
+                        nextVy = -mCOR * tempVelocity + getYAccelerometer() * (dt - t1);
+                        nextY = y_size - getRadius() + (-mCOR * tempVelocity + getYAccelerometer() * (dt - t1) / 2) * (dt - t1);
+                    }
+                } else if (Float.MAX_VALUE != t1) {
+                    nextVy = -getCOR() * getYVelocity();
+                    t1 = (y_size - getY() - getRadius()) / getYVelocity();
+                    nextY = y_size + nextVy * (dt - t1) - getRadius();
                 }
-            } else if (Float.MAX_VALUE != t1) {
-                nextVy = -getCOR() * getYVelocity();
-                t1 = (y_size - getY() - getRadius()) / getYVelocity();
-                nextY = y_size + nextVy * (dt - t1) - getRadius();
             }
         }
 
-        if (nextY < 0 || nextX < 0) {
+        if (nextX < getRadius() && getRadius() - nextX <= 1) {
+            nextX = getRadius();
+        }
+        if (nextY < getRadius() && getRadius() - nextY <= 1) {
+            nextY = getRadius();
+        }
+        if (nextY - getRadius() < 0 || nextX - getRadius() < 0) {
             Log.d(TAG, "next x,y < 0");
         }
         // 防止积累
         if (nextX + getRadius() - x_size > 0 && nextX + getRadius() - x_size <= 1) {
-            nextX = x_size - getRadius() ;
+            nextX = x_size - getRadius();
         }
         if (nextY + getRadius() - y_size > 0 && nextY + getRadius() - y_size <= 1) {
             nextY = y_size - getRadius();

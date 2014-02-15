@@ -12,6 +12,9 @@ public class BallField {
     public static final float DEFAULT_DELTA_T=1.0f;
     private float mSizeX;
     private float mSizeY;
+    private float mMaxRandomXAccelerometer;
+    private float mMaxRandomYAccelerometer;
+    private boolean mRandomMove=false;
 
     private Set<Ball> mBalls;
 
@@ -48,7 +51,20 @@ public class BallField {
     }
 
 
+    public void randomAccelerometerMove(){
 
+    }
+
+    public boolean isRandomMove(){
+        return mRandomMove;
+    }
+
+    public void enableRandomMove(){
+        mRandomMove=true;
+    }
+    public void disableRandomMove(){
+        mRandomMove=false;
+    }
     private void initBalls(){
         Random rnd=new Random();
         for(Ball ball: getmBalls()){
@@ -59,6 +75,11 @@ public class BallField {
     }
 
     public void moveBalls(){
+        if (isRandomMove()){
+            Random random=new Random();
+            mBall.setXAccelerometer(mMaxRandomXAccelerometer*random.nextFloat());
+            mBall.setYAccelerometer(mMaxRandomYAccelerometer*random.nextFloat());
+        }
 //        for(Ball ball: getmBalls()){
 //            ball.nextPos(getmDeltaT(), getmSizeX(), getmSizeY());
 //        }
@@ -103,5 +124,21 @@ public class BallField {
 
     public void setmBall(Ball mBall) {
         this.mBall = mBall;
+    }
+
+    public float getMaxRandomXAccelerometer() {
+        return mMaxRandomXAccelerometer;
+    }
+
+    public void setMaxRandomXAccelerometer(float mMaxRandomXAccelerometer) {
+        this.mMaxRandomXAccelerometer = mMaxRandomXAccelerometer;
+    }
+
+    public float getMaxRandomYAccelerometer() {
+        return mMaxRandomYAccelerometer;
+    }
+
+    public void setMaxRandomYAccelerometer(float mMaxRandomYAccelerometer) {
+        this.mMaxRandomYAccelerometer = mMaxRandomYAccelerometer;
     }
 }

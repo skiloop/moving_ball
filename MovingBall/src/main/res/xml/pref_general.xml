@@ -54,18 +54,18 @@
             android:defaultValue="40"
             android:inputType="numberDecimal" />
         <EditTextPreference
-            android:key="@string/acce_x"
-            android:title="@string/acce_x"
+            android:key="@string/accelerometer_x"
+            android:title="@string/accelerometer_x"
             android:defaultValue="0.0"
             android:inputType="numberDecimal" />
         <EditTextPreference
-            android:key="@string/acce_y"
-            android:title="@string/acce_y"
+            android:key="@string/accelerometer_y"
+            android:title="@string/accelerometer_y"
             android:defaultValue="3.0"
             android:inputType="numberDecimal" />
         <EditTextPreference
-            android:key="@string/coeff_of_restitution"
-            android:title="@string/coeff_of_restitution"
+            android:key="@string/coefficients_of_restitution"
+            android:title="@string/coefficients_of_restitution"
             android:defaultValue="1.0"
             android:inputType="numberDecimal" />
         <EditTextPreference
@@ -82,7 +82,27 @@
         <CheckBoxPreference
             android:key="@string/use_gravity"
             android:title="@string/use_gravity"
+            android:summary="@string/use_gravity_summary"
             android:enabled="true" />
+        <EditTextPreference android:key="@string/gravity_coefficients"
+            android:title="@string/gravity_coefficients"
+            android:summary="@string/gravity_coefficients_summary"
+            android:inputType="numberSigned"/>
+        <CheckBoxPreference android:key="@string/random_accelerometer"
+            android:title="@string/random_accelerometer"
+            android:summary="@string/random_accelerometer_summary"
+            android:enabled="true"
+            android:defaultValue="false"/>
+        <EditTextPreference
+            android:key="@string/max_x_accelerometer"
+            android:title="@string/max_x_accelerometer"
+            android:summary="@string/max_x_accelerometer_summary"
+            android:inputType="numberSigned"/>
+        <EditTextPreference
+            android:key="@string/max_y_accelerometer"
+            android:title="@string/max_y_accelerometer"
+            android:summary="@string/max_y_accelerometer_summary"
+            android:inputType="numberSigned"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/psc_board_settings"
