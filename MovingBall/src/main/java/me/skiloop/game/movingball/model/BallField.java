@@ -1,5 +1,7 @@
 package me.skiloop.game.movingball.model;
 
+import android.util.DisplayMetrics;
+
 import java.util.*;
 
 /**
@@ -78,7 +80,7 @@ public class BallField {
         if (isRandomMove()){
             Random random=new Random();
             mBall.setXAccelerometer(mMaxRandomXAccelerometer*random.nextFloat());
-            mBall.setYAccelerometer(mMaxRandomYAccelerometer*random.nextFloat());
+            mBall.setYAccelerometer(mMaxRandomYAccelerometer * random.nextFloat());
         }
 //        for(Ball ball: getmBalls()){
 //            ball.nextPos(getmDeltaT(), getmSizeX(), getmSizeY());
